@@ -1,0 +1,68 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Source: https://medium.com/@Joachim8675309/vagrant-dynamic-multi-machines-1aaad3e64c96
+
+CONFIGFILE_HOSTS = './config/hosts.yaml'
+require 'YAML'
+readConfig = YAML.load_file(CONFIGFILE_HOSTS)
+
+readConfig.each do |details|
+  port_to_frwd = details['ports']
+  proxy_conf = details['proxy']
+  hdd_conf = details['new_disks']
+  provision_conf = details['provision']
+  Vagrant.configure("2") do |config|
+    config.vbguest.auto_update = false
+    # config.vm.box = details['box']
+    # config.vm.define hostname, primary: default do |node|
+    config.disksize.size = details['hdd_size']
+    config.vm.define details['hostname']  do |node|
+      node.vm.box = details['box']
+      node.vm.hostname = details['hostname']
+      node.vm.network 'private_network', ip: details['ipaddr']
+      node.vm.provider('virtualbox') do |vb|
+        vb.gui = false
+        vb.name = details['hostname']
+        vb.memory = details['myram']
+        vb.cpus = details['cpu']
+       # node.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+      end
+    end
+    # if provision_conf == 0
+    #   puts 'No provision'
+    # else
+    #   provision_conf.each do | myprovision|
+    #     config.vm.provision myprovision['name'], type: "shell", path: myprovision['path']
+    #     config.vm.provision :reload
+    #   end
+    # end
+    config.vm.provision "base", type: "shell", path: "base.sh"
+    config.vm.provision :reload 
+    # config.vm.provision "install-puppet", type: "shell", path: "puppet_install.sh"
+    if port_to_frwd == 0
+      puts 'There is no port to forward'
+    else
+      puts 'There is some ports to forward'
+      port_to_frwd.each do | myports |
+        config.vm.network "forwarded_port", guest: myports['frwd_port'], host: myports['orig_port']
+      end
+    end 
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+      if proxy_conf == 0
+        puts 'Proxy is disabled'
+      else
+        puts 'Proxy is enabled'
+        proxy_conf.each do | myproxy|
+          config.proxy.http     = myproxy['http_server']
+          config.proxy.https    = myproxy['https_server']
+          config.proxy.no_proxy = myproxy['noproxy']
+        end
+      end
+    else
+      puts 'Starting without vagrant proxy'
+    end
+    config.vm.boot_timeout = 600
+  end
+end
+

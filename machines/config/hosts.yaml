@@ -1,0 +1,27 @@
+---
+  - hostname: myserver
+    ipaddr: 192.168.56.50
+    myram: 2048
+    cpu: 2
+    box: "centos/7"
+    hdd_size: "60GB"
+    # provision:
+    #   - name: 'base'
+    #     path: 'base.sh'
+    ports: 0
+      # - orig_port: 5601
+      #   frwd_port: 5601
+      # - orig_port: 9200
+      #   frwd_port: 9200
+      # - orig_port: 9300
+      #   frwd_port: 9300
+    proxy: 0
+      # - http_server: 'http://172.16.136.10:8181'
+      #   https_server: 'http://172.16.136.10:8181'
+      #   noproxy: 'localhost,127.0.0.1,localaddress,.localdomain.com,.sf-rz.de,.sf-bk.de,.insiders.intern,172.27.,172.28.,172.25.,172.23.,192.168.,172.16.'
+
+
+# new_disks:
+  #   - name: mas_1
+  #     size: '10 * 1024'
+  #     format: VDI
