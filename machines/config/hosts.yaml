@@ -16,9 +16,9 @@
       # - orig_port: 9300
       #   frwd_port: 9300
     proxy: 0
-      # - http_server: 'http://172.16.136.10:8181'
-      #   https_server: 'http://172.16.136.10:8181'
-      #   noproxy: 'localhost,127.0.0.1,localaddress,.localdomain.com,.sf-rz.de,.sf-bk.de,.insiders.intern,172.27.,172.28.,172.25.,172.23.,192.168.,172.16.'
+      # - http_server: 'url'
+      #   https_server: 'url'
+      #   noproxy: 'urls'
 
 
 # new_disks:
