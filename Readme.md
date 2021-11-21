@@ -1,6 +1,6 @@
 ## About
 
-In this repo is stored vagrant configuration that allows to install and run multiple virutal machines. Configuration of vms are defined in yaml format in machines/config/hosts.yaml file. 
+In this repo is given vagrant configuration for installing and running multiple virutal machines. Configuration of vms are defined in yaml format in machines/config/hosts.yaml file. 
 
 ````
   - hostname: vm1
